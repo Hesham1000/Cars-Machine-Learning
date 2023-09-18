@@ -1,0 +1,94 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+}
+body{
+    padding: 40px 450px;
+    min-height: 100vh;
+    /* display: flex; */
+    /* flex-wrap: nowrap; */
+    /* flex-direction: column; */
+    background-color: darkred;
+}
+.card{
+    margin-bottom: 50px;
+    position: relative;
+    width: 600px;
+    height: 350px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    /* overflow: hidden; */
+}
+.card .circle{
+    /* overflow: hidden; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.card .circle::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    clip-path: circle(120px at center);
+    transition: .5s ease;
+}
+.card:hover .circle::before{
+    background-color: black;
+    clip-path: circle(400px at center);
+}
+.card img{
+    width: 400px;
+    /* height: 250px; */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(10%,-50%);
+    border-radius: 10px;
+    pointer-events: none;
+    transition: .5s ease;
+}
+.card:hover img{
+    left: 90%;
+    /* height: 300px; */
+}
+.card .content{
+    left: 20%;
+    /* top: -25%; */
+    transition: .5s ease;
+    position: relative;
+    width: 50%;
+    padding: 20px 20px 20px 40px;
+    color: white;
+    visibility: hidden;
+    opacity: 0;
+}
+.card:hover .content{
+    left: 0;
+    opacity: 1;
+    visibility: visible;
+}
+.content h1{
+    color: lightcoral;
+    text-transform: capitalize;
+    margin-bottom: 10px;
+}
+.content p{
+    margin-bottom: 30px;
+}
+.content a{
+    text-decoration: none;
+    text-transform: capitalize;
+    color: white;
+    background-color: lightcoral;
+    border-radius: 10px;
+    padding: 10px
+}
