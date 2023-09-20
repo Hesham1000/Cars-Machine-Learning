@@ -688,7 +688,10 @@
     </section>
     <section class="d" id="d">
     </section>
+
+
     {% comment %} this form predict the price of cars {% endcomment %}
+    
     <section class="e" id="e">
       <div class="form">
         <div class="img"><img src="{% static 'photos/c2.jpg' %}" alt="" /></div>
@@ -698,44 +701,17 @@
             {% csrf_token %}
             <div class="labels">
               <label for="">year</label>
-              {% comment %} <label for="">transmission</label> {% endcomment %}
               <label for="">mileage</label>
-              {% comment %} <label for="">fuelType</label> {% endcomment %}
               <label for="">tax</label>
               <label for="">mPG</label>
               <label for="">engine Size</label>
             </div>
             <div class="inputs">
               <input type="number" name="year" required />
-              {% comment %} <input type="text" name="trans" required /> {%
-              endcomment %} {% comment %}
-              <select name="trans" id="t3" required>
-                <option value="none">none</option>
-                <option value="Automatic">automatic</option>
-                <option value="Manual">manual</option>
-                <option value="Semi-Auto">semi-auto</option>
-              </select>
-              {% endcomment %}
-
               <input type="number" name="mil" required />
-              {% comment %} <input type="text" name="ft" required /> {%
-              endcomment %} {% comment %}
-              <select name="ft" id="ft" required>
-                <option value="none">none</option>
-                <option value="Diesel">diesel</option>
-                <option value="Petrol">petrol</option>
-              </select>
-              {% endcomment %}
-
               <input type="number" name="tax" required />
               <input type="number" name="mpg" step="any" required />
               <input type="number" name="es" step="any" required />
-
-              {% comment %} <input type="number" name="ei" required />
-              <input type="number" name="ni" required />
-              <input type="number" name="te" required />
-              <input type="number" name="el" required />
-              <input type="number" name="tw" required /> {% endcomment %}
             </div>
             <input class="sub" type="submit" name="ff" />
             {% if result %}
