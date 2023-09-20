@@ -33,7 +33,6 @@ DEBUG = True
 INSTALLED_APPS = [
     # 'db.apps.SuitConfig',
     'grappelli',
-    'db.apps.DbConfig',
     'blog.apps.BlogConfig',
     'django.contrib.admin',
     'django.contrib.auth',
