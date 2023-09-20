@@ -518,75 +518,6 @@ body.open .menu a{
 }
 
 
-
-/* .d{
-    width: 100%;
-    min-height: 60vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-} */
-.d div{
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: #14202e;
-    color: #ffffff;
-}
-.d h1{
-    text-align: center;
-    text-transform: uppercase;
-    margin-top: 100px;
-    color: #2d4356;
-    font-family: 'Poppins', sans-serif;
-}
-.d .cards{
-    width: 100%;
-    min-height: 60px;
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-    justify-content: center;
-}
-.d .cards .card{
-    background-color: transparent;
-    margin-left: 30px;
-    width: 300px;
-    height: 350px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    border-radius: 20px;
-    align-items: center;
-    justify-content: center;
-}
-.card img{
-    border-radius: 50%;
-    width: 100%;
-    /* height: 100%; */
-}
-.text{
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    align-items: center;
-    /* color: red; */
-}
-.text h3{
-    color: #2d4356;
-    /* font-family: 'Poppins', sans-serif; */
-    font-family: 'Amatic SC', cursive;
-    font-size: 20px;
-    text-transform: capitalize;
-}
-.text p{
-    font-family: 'Lily Script One', cursive;
-    text-transform: capitalize;
-    font-family: 'Amatic SC', cursive;
-}
-
-
 .e{
     width: 100%;
     min-height: 100vh;
@@ -727,6 +658,10 @@ body.open .menu a{
     color: #2d4356;
     text-transform: uppercase;
 }
+
+
+
+
 footer{
     width: 100%;
     color: #fff;
