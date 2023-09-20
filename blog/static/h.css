@@ -154,6 +154,8 @@ body.open .menu a{
     opacity: 1;
     animation: appear .7s backwards;
 }
+
+
 .main{
     height: 100%;
     width: 100%;
@@ -523,7 +525,8 @@ body.open .menu a{
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center
+    align-items: center;
+    background: linear-gradient(245deg, #89aac3 0%, #2d4356 50%, #14202e 55%);
 }
 .e .form{
     width: 900px;

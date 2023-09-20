@@ -10,7 +10,6 @@ from .models import Register
 import pickle
 
 model = pickle.load(open('blog\models\CarsModel.pkl', 'rb'))
-# lb = pickle.load(open('blog\models\CarsModelLE.pkl', 'rb'))
 
 
 def home(request):
