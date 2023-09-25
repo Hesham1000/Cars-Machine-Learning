@@ -6,12 +6,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/c2e094ea21.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{% static 'h.css' %}" type='text/css'>
+    <link rel="stylesheet" href="{% static 'home.css' %}" type='text/css'>
     <title></title>
 </head>
 <body>
     <header>
-        <a href="" class="logo"><span>ml</span>-cars</a>
+        <a href="###" class="logo"><span>ml</span>-cars</a>
+        <div class="input">
+            <input type="text" placeholder="Search" id="mysearch" name="search"/>
+            <i class="fa-solid fa-magnifying-glass"></i>         
+        </div>
+        <ul class="nav">
+                <li><a href="">home</a></li>
+                <li><a href="">about</a></li>
+                <li><a href="">login</a></li>
+                <li><a href="">cars</a></li>
+                <li><a href="">contact</a></li>
+            </ul>
+        <div class="social-media">
+            <ul>
+                <li><a href="##">Twitter <i class="fa fa-twitter"></i></a></li>
+                <li><a href="##">Github <i class="fa fa-github"></i></a></li>
+                <li><a href="##">Linkedin <i class="fa fa-linkedin"></i></a></li>
+            </ul>
+        </div>
+    </header>
+    {% comment %} <a href="" class="logo"><span>ml</span>-cars</a>
         <button class="burger" onclick="toggleMenu()"><img id="imgnv" class="oneimgnv" src="{% static 'photos/steering-wheel-removebg-preview.png' %}" alt="">
             <img class="twoimgnv" src="{% static 'photos/steering-wheel__1_-removebg-preview.png' %}" alt=""></button>
         <div class="bg"></div>
@@ -23,15 +43,7 @@
                 <a href="">cars</a>
                 <a href="">contact</a>
             </nav>
-        </div>
-    </header>
-    <nav class="social-media">
-        <ul>
-            <li><a href="">Twitter <i class="fa fa-twitter"></i></a></li>
-            <li><a href="">Github <i class="fa fa-github"></i></a></li>
-            <li><a href="">Linkedin <i class="fa fa-linkedin"></i></a></li>
-        </ul>
-    </nav>
+        </div> {% endcomment %}
     <script type="text/javascript">
         const toggleMenu = () => {
             document.body.classList.toggle("open");
