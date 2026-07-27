@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+{% extends 'navbar.html' %} {% block 'nav' %}
+{% load static %}
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.0.0/fonts/remixicon.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <title>New Car Price Prediction</title>
+  </head>
+  <body>
+    <header class="dash-header">
+      <a href="{% url 'home' %}" class="logo"><span>ml</span>-cars</a>
+      <ul class="dash-nav">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="/dashboard/">Dashboard</a></li>
+        <li><a href="/dashboard/new/" class="active">New Prediction</a></li>
+        <li><a href="/dashboard/history/">History</a></li>
+      </ul>
+    </header>
+
+    <section class="dash-form-section">
+      <div class="dash-form-container">
+        <h1>new car <span>prediction</span></h1>
+        <form class="dash-form" method="POST" action="{% url 'dashboard_predict' %}">
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label for="brand">Brand</label>
+            <select name="brand" id="brand" required>
+              <option value="" disabled selected>Select brand</option>
+              <option value="Toyota">Toyota</option>
+              <option value="Honda">Honda</option>
+              <option value="Ford">Ford</option>
+              <option value="BMW">BMW</option>
+              <option value="Mercedes">Mercedes</option>
+              <option value="Audi">Audi</option>
+              <option value="Tesla">Tesla</option>
+              <option value="Hyundai">Hyundai</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="model">Model</label>
+            <input type="text" name="model" id="model" placeholder="e.g. Corolla, Civic" required />
+          </div>
+
+          <div class="form-group">
+            <label for="year">Year</label>
+            <input type="number" name="year" id="year" min="1990" max="2025" placeholder="1990 - 2025" required />
+          </div>
+
+          <div class="form-group">
+            <label for="mileage">Mileage (km)</label>
+            <input type="number" name="mileage" id="mileage" min="0" placeholder="e.g. 50000" required />
+          </div>
+
+          <div class="form-group">
+            <label for="fuel_type">Fuel Type</label>
+            <select name="fuel_type" id="fuel_type" required>
+              <option value="" disabled selected>Select fuel type</option>
+              <option value="Petrol">Petrol</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Electric">Electric</option>
+              <option value="Hybrid">Hybrid</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="transmission">Transmission</label>
+            <select name="transmission" id="transmission" required>
+              <option value="" disabled selected>Select transmission</option>
+              <option value="Manual">Manual</option>
+              <option value="Automatic">Automatic</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="engine_size">Engine Size (L)</label>
+            <input type="number" name="engine_size" id="engine_size" step="0.1" min="0" placeholder="e.g. 2.5" required />
+          </div>
+
+          <div class="form-group">
+            <label for="horsepower">Horsepower (HP)</label>
+            <input type="number" name="horsepower" id="horsepower" min="0" placeholder="e.g. 200" required />
+          </div>
+
+          <div class="form-group">
+            <label for="doors">Number of Doors</label>
+            <select name="doors" id="doors" required>
+              <option value="" disabled selected>Select doors</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="owners">Previous Owners</label>
+            <input type="number" name="owners" id="owners" min="0" placeholder="e.g. 1" required />
+          </div>
+
+          <div class="submit-row">
+            <button type="submit" class="submit-btn">
+              <i class="fa-solid fa-calculator"></i> &nbsp; Predict Price
+            </button>
+            <a href="/dashboard/" class="back-btn">
+              <i class="fa-solid fa-arrow-left"></i> &nbsp; Back to Dashboard
+            </a>
+          </div>
+        </form>
+
+        {% if result %}
+        <div style="text-align: center; margin-top: 30px; padding: 25px; background: linear-gradient(145deg, #190a05, #2a0d08); border: 1px solid #870000; border-radius: 12px;">
+          <h3 style="color: darkgray; text-transform: uppercase; font-size: 14px; letter-spacing: 2px; margin-bottom: 10px;">Estimated Price</h3>
+          <p style="color: #ffffff; font-family: 'Permanent Marker', cursive; font-size: 42px;">
+            <span style="color: #870000;">$</span>{{ result }}
+          </p>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <footer class="dash-footer">
+      <p>hesham tarek @ <span id="year"></span> - all rights reserved</p>
+    </footer>
+
+    <script
+      src="https://kit.fontawesome.com/c2e094ea21.js"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+    {% endblock %}
+  </body>
+</html>
+

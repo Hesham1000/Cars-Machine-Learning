@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+{% extends 'navbar.html' %} {% block 'nav' %}
+{% load static %}
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.0.0/fonts/remixicon.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Prediction History</title>
+  </head>
+  <body>
+    <header class="dash-header">
+      <a href="{% url 'home' %}" class="logo"><span>ml</span>-cars</a>
+      <ul class="dash-nav">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="/dashboard/">Dashboard</a></li>
+        <li><a href="/dashboard/new/">New Prediction</a></li>
+        <li><a href="/dashboard/history/" class="active">History</a></li>
+      </ul>
+    </header>
+
+    <section class="history-section">
+      <h1>prediction <span>history</span></h1>
+
+      <div class="search-bar">
+        <form method="GET" action="{% url 'dashboard_history' %}">
+          <input type="text" name="search" placeholder="Search by brand, model, or year..." value="{{ request.GET.search }}" />
+          <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </form>
+      </div>
+
+      {% if predictions %}
+      <div class="history-table-wrapper">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Date</th>
+              <th>Brand</th>
+              <th>Model</th>
+              <th>Year</th>
+              <th>Mileage</th>
+              <th>Fuel</th>
+              <th>Transmission</th>
+              <th>Predicted Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for prediction in predictions %}
+            <tr>
+              <td>#{{ prediction.id }}</td>
+              <td>{{ prediction.date }}</td>
+              <td>{{ prediction.brand }}</td>
+              <td>{{ prediction.model }}</td>
+              <td>{{ prediction.year }}</td>
+              <td>{{ prediction.mileage }} km</td>
+              <td>{{ prediction.fuel_type }}</td>
+              <td>{{ prediction.transmission }}</td>
+              <td class="price-cell">${{ prediction.price }}</td>
+              <td>
+                <form method="POST" action="{% url 'dashboard_delete' prediction.id %}" style="display: inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this prediction?');">
+                    <i class="fa-solid fa-trash"></i> Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% if is_paginated %}
+      <div class="pagination">
+        {% if page_obj.has_previous %}
+          <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">&laquo; First</a>
+          <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Previous</a>
+        {% else %}
+          <span class="disabled">&laquo; First</span>
+          <span class="disabled">Previous</span>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <span class="current">{{ num }}</span>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Next</a>
+          <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Last &raquo;</a>
+        {% else %}
+          <span class="disabled">Next</span>
+          <span class="disabled">Last &raquo;</span>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% else %}
+      <div class="empty-state">
+        <i class="fa-solid fa-folder-open"></i>
+        <h3>No predictions found</h3>
+        <p>{% if request.GET.search %}No results match your search. Try a different keyword.{% else %}You haven't made any predictions yet. Start by making your first one!{% endif %}</p>
+        <a href="/dashboard/new/" class="action-btn">
+          <i class="fa-solid fa-plus"></i> &nbsp; Make a Prediction
+        </a>
+      </div>
+      {% endif %}
+
+      <div style="text-align: center;">
+        <a href="/dashboard/" class="back-link">
+          <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+      </div>
+    </section>
+
+    <footer class="dash-footer">
+      <p>hesham tarek @ <span id="year"></span> - all rights reserved</p>
+    </footer>
+
+    <script
+      src="https://kit.fontawesome.com/c2e094ea21.js"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+    {% endblock %}
+  </body>
+</html>
+
