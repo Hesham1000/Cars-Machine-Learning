@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+{% extends 'navbar.html' %} {% block 'nav' %}
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.0.0/fonts/remixicon.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://kit.fontawesome.com/c2e094ea21.js"
+      crossorigin="anonymous"
+    />
+    <title>Dashboard | ML-Cars</title>
+    <style>
+      /* ============ Reset & Base ============ */
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        list-style: none;
+        text-decoration: none;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(245.59deg, #870000 0%, #190a05 70%);
+        min-height: 100vh;
+        color: #ffffff;
+        overflow-x: hidden;
+      }
+
+      /* ============ Dashboard Navigation ============ */
+      .dash-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 6%;
+        background: rgba(7, 3, 10, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .dash-nav .logo {
+        font-size: 26px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #ffffff;
+        letter-spacing: 1px;
+      }
+
+      .dash-nav .logo span {
+        color: #870000;
+      }
+
+      .dash-nav .nav-links {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+      }
+
+      .dash-nav .nav-links a {
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 500;
+        text-transform: capitalize;
+        position: relative;
+        padding: 6px 4px;
+        transition: color 0.3s ease;
+      }
+
+      .dash-nav .nav-links a::before {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 3px;
+        left: 0;
+        bottom: -2px;
+        background-color: #870000;
+        transition: width 0.4s ease-in-out;
+        border-radius: 2px;
+      }
+
+      .dash-nav .nav-links a:hover,
+      .dash-nav .nav-links a.active {
+        color: #ff6b6b;
+      }
+
+      .dash-nav .nav-links a:hover::before,
+      .dash-nav .nav-links a.active::before {
+        width: 100%;
+      }
+
+      .dash-nav .nav-links a i {
+        margin-right: 6px;
+        font-size: 16px;
+      }
+
+      /* ============ Page Header ============ */
+      .page-header {
+        padding: 60px 6% 30px;
+        text-align: center;
+      }
+
+      .page-header h1 {
+        font-family: "Permanent Marker", cursive;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        color: #ffffff;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+      }
+
+      .page-header h1 span {
+        color: #ff6b6b;
+      }
+
+      .page-header p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1rem;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* ============ Stats Section ============ */
+      .stats-section {
+        padding: 30px 6% 50px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .stat-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 28px 24px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.35s ease, box-shadow 0.35s ease,
+          border-color 0.35s ease;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #870000, #ff6b6b);
+        opacity: 0;
+        transition: opacity 0.35s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 40px rgba(135, 0, 0, 0.35);
+        border-color: rgba(255, 107, 107, 0.4);
+      }
+
+      .stat-card:hover::before {
+        opacity: 1;
+      }
+
+      .stat-card .stat-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #870000, #190a05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 18px;
+        font-size: 1.6rem;
+        color: #ffffff;
+        box-shadow: 0 8px 20px rgba(135, 0, 0, 0.4);
+      }
+
+      .stat-card .stat-label {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .stat-card .stat-value {
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-weight: 700;
+        color: #ffffff;
+        line-height: 1.1;
+        margin-bottom: 6px;
+      }
+
+      .stat-card .stat-suffix {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.55);
+        font-weight: 400;
+      }
+
+      /* ============ Cars Section ============ */
+      .cars-section {
+        padding: 30px 6% 80px;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1400px;
+        margin: 0 auto 30px;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .section-title h2 {
+        font-size: clamp(1.4rem, 3vw, 1.9rem);
+        font-weight: 700;
+        color: #ffffff;
+        text-transform: capitalize;
+        position: relative;
+        padding-left: 18px;
+      }
+
+      .section-title h2::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 5px;
+        height: 70%;
+        background: #870000;
+        border-radius: 3px;
+      }
+
+      .section-title .car-count {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.95rem;
+        font-weight: 400;
+      }
+
+      .cars-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 28px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .car-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.4s ease, box-shadow 0.4s ease,
+          border-color 0.4s ease;
+        position: relative;
+      }
+
+      .car-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 22px 50px rgba(0, 0, 0, 0.5);
+        border-color: rgba(255, 107, 107, 0.35);
+      }
+
+      .car-card .car-image {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, #1a0a0a 0%, #2a1010 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .car-card .car-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .car-card:hover .car-image img {
+        transform: scale(1.08);
+      }
+
+      .car-card .car-image .placeholder-icon {
+        font-size: 4rem;
+        color: rgba(255, 255, 255, 0.15);
+        transition: color 0.4s ease, transform 0.4s ease;
+      }
+
+      .car-card:hover .car-image .placeholder-icon {
+        color: rgba(255, 107, 107, 0.4);
+        transform: scale(1.1);
+      }
+
+      .car-card .car-badge {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        background: rgba(135, 0, 0, 0.9);
+        color: #ffffff;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        backdrop-filter: blur(4px);
+      }
+
+      .car-card .car-body {
+        padding: 22px 22px 24px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+
+      .car-card .car-make {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #ff6b6b;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      .car-card .car-model {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 14px;
+        line-height: 1.3;
+      }
+
+      .car-card .car-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+        padding: 12px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .car-card .car-meta .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 0.88rem;
+        font-weight: 500;
+      }
+
+      .car-card .car-meta .meta-item i {
+        color: #ff6b6b;
+        font-size: 0.95rem;
+      }
+
+      .car-card .car-price {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+      }
+
+      .car-card .car-price .currency {
+        font-size: 1rem;
+        color: #ff6b6b;
+        font-weight: 600;
+      }
+
+      .car-card .view-details {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 12px 20px;
+        background: linear-gradient(135deg, #870000, #5a0000);
+        color: #ffffff;
+        border-radius: 10px;
+        font-size: 0.92rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        transition: all 0.35s ease;
+        border: 1px solid transparent;
+        margin-top: auto;
+      }
+
+      .car-card .view-details:hover,
+      .car-card .view-details:focus-visible {
+        background: transparent;
+        border-color: #ff6b6b;
+        color: #ff6b6b;
+        transform: translateY(-2px);
+        outline: none;
+      }
+
+      .car-card .view-details i {
+        transition: transform 0.35s ease;
+      }
+
+      .car-card .view-details:hover i {
+        transform: translateX(4px);
+      }
+
+      /* ============ Empty State ============ */
+      .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        color: rgba(255, 255, 255, 0.6);
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .empty-state i {
+        font-size: 4rem;
+        color: rgba(255, 107, 107, 0.4);
+        margin-bottom: 20px;
+        display: block;
+      }
+
+      .empty-state h3 {
+        font-size: 1.4rem;
+        color: #ffffff;
+        margin-bottom: 10px;
+        font-weight: 600;
+      }
+
+      .empty-state p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      /* ============ Footer ============ */
+      .dash-footer {
+        text-align: center;
+        padding: 30px 6%;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.85rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .dash-footer span {
+        color: #ff6b6b;
+        font-weight: 600;
+      }
+
+      /* ============ Responsive ============ */
+      @media (max-width: 1024px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 18px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .dash-nav {
+          padding: 16px 4%;
+          flex-direction: column;
+          gap: 14px;
+        }
+
+        .dash-nav .nav-links {
+          gap: 18px;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .dash-nav .nav-links a {
+          font-size: 0.9rem;
+        }
+
+        .page-header {
+          padding: 40px 4% 20px;
+        }
+
+        .stats-section {
+          padding: 20px 4% 40px;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 14px;
+        }
+
+        .stat-card {
+          padding: 22px 18px;
+        }
+
+        .stat-card .stat-icon {
+          width: 48px;
+          height: 48px;
+          font-size: 1.4rem;
+        }
+
+        .cars-section {
+          padding: 20px 4% 60px;
+        }
+
+        .cars-grid {
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 18px;
+        }
+
+        .section-title {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .cars-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .car-card .car-image {
+          height: 180px;
+        }
+      }
+
+      /* ============ Accessibility ============ */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* Focus styles for keyboard navigation */
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid #ff6b6b;
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============ Navigation ============ -->
+    <nav class="dash-nav" aria-label="Dashboard navigation">
+      <a href="{% url 'home' %}" class="logo" aria-label="ML-Cars home">
+        <span>ml</span>-cars
+      </a>
+      <div class="nav-links">
+        <a href="{% url 'home' %}" aria-label="Go to home page">
+          <i class="fa-solid fa-house"></i>Home
+        </a>
+        <a href="{% url 'dashboard' %}" class="active" aria-current="page" aria-label="Current page: Dashboard">
+          <i class="fa-solid fa-gauge-high"></i>Dashboard
+        </a>
+        <a href="{% url 'car_list' %}" aria-label="View all cars list">
+          <i class="fa-solid fa-car"></i>Cars
+        </a>
+      </div>
+    </nav>
+
+    <!-- ============ Page Header ============ -->
+    <header class="page-header">
+      <h1>Car <span>Dashboard</span></h1>
+      <p>
+        Explore our complete inventory with real-time statistics and detailed
+        information about every vehicle in our collection.
+      </p>
+    </header>
+
+    <!-- ============ Stats Section ============ -->
+    <section class="stats-section" aria-labelledby="stats-heading">
+      <h2 id="stats-heading" class="sr-only" style="position:absolute;left:-9999px;">
+        Dashboard Statistics
+      </h2>
+      <div class="stats-grid">
+        <!-- Total Cars -->
+        <article class="stat-card" aria-label="Total cars statistic">
+          <div class="stat-icon" aria-hidden="true">
+            <i class="fa-solid fa-car-side"></i>
+          </div>
+          <div class="stat-label">Total Cars</div>
+          <div class="stat-value">{{ total_cars|default:0 }}</div>
+          <div class="stat-suffix">vehicles in stock</div>
+        </article>
+
+        <!-- Average Price -->
+        <article class="stat-card" aria-label="Average price statistic">
+          <div class="stat-icon" aria-hidden="true">
+            <i class="fa-solid fa-dollar-sign"></i>
+          </div>
+          <div class="stat-label">Average Price</div>
+          <div class="stat-value">
+            ${{ avg_price|floatformat:0|default:0 }}
+          </div>
+          <div class="stat-suffix">USD per vehicle</div>
+        </article>
+
+        <!-- Average Year -->
+        <article class="stat-card" aria-label="Average year statistic">
+          <div class="stat-icon" aria-hidden="true">
+            <i class="fa-solid fa-calendar-days"></i>
+          </div>
+          <div class="stat-label">Average Year</div>
+          <div class="stat-value">{{ avg_year|floatformat:0|default:0 }}</div>
+          <div class="stat-suffix">model year</div>
+        </article>
+
+        <!-- Total Makes -->
+        <article class="stat-card" aria-label="Total makes statistic">
+          <div class="stat-icon" aria-hidden="true">
+            <i class="fa-solid fa-industry"></i>
+          </div>
+          <div class="stat-label">Total Makes</div>
+          <div class="stat-value">{{ total_makes|default:0 }}</div>
+          <div class="stat-suffix">unique brands</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ Cars Grid Section ============ -->
+    <section class="cars-section" aria-labelledby="cars-heading">
+      <div class="section-title">
+        <h2 id="cars-heading">Available Vehicles</h2>
+        <span class="car-count">
+          Showing {{ cars|length }} {{ cars|length|pluralize:"car,cars" }}
+        </span>
+      </div>
+
+      {% if cars %}
+      <div class="cars-grid" role="list">
+        {% for car in cars %}
+        <article class="car-card" role="listitem" aria-label="{{ car.make }} {{ car.model }} {{ car.year }}">
+          <div class="car-image">
+            {% if car.image_url %}
+              <img src="{{ car.image_url }}" alt="{{ car.make }} {{ car.model }} {{ car.year }}" loading="lazy" />
+            {% else %}
+              <i class="fa-solid fa-car placeholder-icon" aria-hidden="true"></i>
+            {% endif %}
+            <span class="car-badge">{{ car.year }}</span>
+          </div>
+          <div class="car-body">
+            <div class="car-make">{{ car.make }}</div>
+            <h3 class="car-model">{{ car.model }}</h3>
+            <div class="car-meta">
+              <span class="meta-item">
+                <i class="fa-solid fa-calendar" aria-hidden="true"></i>
+                {{ car.year }}
+              </span>
+              <span class="meta-item">
+                <i class="fa-solid fa-tag" aria-hidden="true"></i>
+                {{ car.make }}
+              </span>
+            </div>
+            <div class="car-price">
+              <span class="currency">$</span>{{ car.price|floatformat:0 }}
+            </div>
+            <a
+              href="{% url 'car_detail' car.id %}"
+              class="view-details"
+              aria-label="View details for {{ car.make }} {{ car.model }}"
+            >
+              View Details <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state" role="status">
+        <i class="fa-solid fa-car-burst" aria-hidden="true"></i>
+        <h3>No Cars Available</h3>
+        <p>
+          There are currently no vehicles in our inventory. Please check back
+          later or contact us for more information.
+        </p>
+      </div>
+      {% endif %}
+    </section>
+
+    <!-- ============ Footer ============ -->
+    <footer class="dash-footer">
+      <p>
+        &copy; <span id="year"></span> <span>ml-cars</span> &mdash; All rights
+        reserved.
+      </p>
+    </footer>
+
+    <script>
+      // Auto-update copyright year
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
+{% endblock %}
+
