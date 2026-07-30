@@ -129,3 +129,7 @@ STATIC_ROOT = 'staticfiles'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import os
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
+
