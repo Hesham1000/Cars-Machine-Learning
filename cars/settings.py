@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,11 +77,20 @@ WSGI_APPLICATION = 'cars.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+import dj_database_url
+
+# Normalize the DATABASE_URL sslmode: provisioning may emit `sslmode=no-verify`,
+# which psycopg2 rejects. `no-verify` means 'use TLS without verifying the cert',
+# which maps to psycopg2's `sslmode=require`.
+_db_url = os.environ.get('DATABASE_URL', '')
+if _db_url and 'sslmode=no-verify' in _db_url:
+    os.environ['DATABASE_URL'] = _db_url.replace('sslmode=no-verify', 'sslmode=require')
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default='sqlite:///db.sqlite3',
+        conn_max_age=600
+    )
 }
 
 

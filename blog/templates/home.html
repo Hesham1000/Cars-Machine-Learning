@@ -66,13 +66,15 @@
     {% comment %} this form predict the price of cars {% endcomment %}
 
     <section class="e" id="e">
+      {% if user.is_authenticated %}
       <div class="form">
         <div class="img"><img src="{% static 'photos/pexels-yurii-hlei-1545743.jpg' %}" alt="" /></div>
         <div class="input">
           <h1 class="h1">features</h1>
-          <form id="f" action="#e" method="POST">
+          <form id="predict-form">
             {% csrf_token %}
             <div class="labels">
+              <label for="">model</label>
               <label for="">year</label>
               <label for="">mileage</label>
               <label for="">tax</label>
@@ -80,19 +82,114 @@
               <label for="">engine Size</label>
             </div>
             <div class="inputs">
+              <input type="text" name="model" placeholder="e.g. Toyota Corolla" required />
               <input type="number" name="year" required />
-              <input type="number" name="mil" required />
+              <input type="number" name="mileage" required />
               <input type="number" name="tax" required />
               <input type="number" name="mpg" step="any" required />
               <input type="number" name="es" step="any" required />
             </div>
-            <input class="sub" type="submit" name="ff" />
-            {% if result %}
-            <h1 class="price"><span>price =</span> {{result}}<span>$</span></h1>
-            {% endif %}
+            <input class="sub" type="submit" name="ff" value="predict" />
+            <div id="predict-result" class="price"></div>
           </form>
+          <script>
+            (function () {
+              var form = document.getElementById('predict-form');
+              var resultDiv = document.getElementById('predict-result');
+
+              function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                  var cookies = document.cookie.split(';');
+                  for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                    }
+                  }
+                }
+                return cookieValue;
+              }
+
+              function getCsrfToken() {
+                var token = getCookie('csrftoken');
+                if (token) {
+                  return token;
+                }
+                var fallback = document.querySelector('input[name="csrfmiddlewaretoken"]');
+                return fallback ? fallback.value : '';
+              }
+
+              function showError(message) {
+                resultDiv.className = 'price predict-error';
+                resultDiv.textContent = message;
+              }
+
+              form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                var submitBtn = form.querySelector('input.sub');
+                var csrfToken = getCsrfToken();
+
+                var payload = {
+                  model: form.elements['model'].value,
+                  year: Number(form.elements['year'].value),
+                  mileage: Number(form.elements['mileage'].value),
+                  tax: Number(form.elements['tax'].value),
+                  mpg: Number(form.elements['mpg'].value),
+                  es: Number(form.elements['es'].value)
+                };
+
+                submitBtn.disabled = true;
+
+                fetch('/api/predict/', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                  },
+                  credentials: 'same-origin',
+                  body: JSON.stringify(payload)
+                })
+                  .then(function (response) {
+                    if (!response.ok) {
+                      return response.json().then(function (data) {
+                        throw new Error(data.error || 'Prediction failed (status ' + response.status + ').');
+                      }).catch(function (parseErr) {
+                        if (parseErr instanceof Error && parseErr.message) {
+                          throw parseErr;
+                        }
+                        throw new Error('Prediction failed (status ' + response.status + ').');
+                      });
+                    }
+                    return response.json();
+                  })
+                  .then(function (data) {
+                    var predictedPrice = data.predicted_price;
+                    resultDiv.className = 'price';
+                    resultDiv.innerHTML = '<span>price =</span> ' + predictedPrice + '<span>$</span>';
+                  })
+                  .catch(function (err) {
+                    var message = (err && err.message) ? err.message : 'A network error occurred. Please try again.';
+                    showError(message);
+                  })
+                  .finally(function () {
+                    submitBtn.disabled = false;
+                  });
+              });
+            })();
+          </script>
         </div>
       </div>
+      {% else %}
+      <div class="form">
+        <div class="input">
+          <h1 class="h1">features</h1>
+          <p class="price">You must <a href="{% url 'login' %}">login</a> to use the price predictor.</p>
+        </div>
+      </div>
+      {% endif %}
     </section>
 
 
