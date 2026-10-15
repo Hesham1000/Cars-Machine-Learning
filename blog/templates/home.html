@@ -98,6 +98,41 @@
 
 
 
+    <section class="prediction-section">
+        <h2>Predict Car Price</h2>
+        <form id="predictionForm">
+            {% csrf_token %}
+            <input type="text" id="carModel" placeholder="Enter Car Model" required>
+            <button type="submit">Predict</button>
+        </form>
+        <div id="result"></div>
+    </section>
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const carModel = document.getElementById('carModel').value;
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            try {
+                const response = await fetch('/blog/api/predict/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({ car_model: carModel })
+                });
+                const data = await response.json();
+                if (data.price) {
+                    document.getElementById('result').innerText = `Predicted Price: $${data.price.toFixed(2)}`;
+                } else {
+                    document.getElementById('result').innerText = 'Error: ' + data.error;
+                }
+            } catch (err) {
+                document.getElementById('result').innerText = 'Failed to connect to server.';
+            }
+        });
+    </script>
+
     <footer id="foot">
       <div class="row">
         <div class="col">
