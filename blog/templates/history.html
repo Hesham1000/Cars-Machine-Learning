@@ -1,0 +1,17 @@
+{% extends 'navbar.html' %}
+{% block 'nav' %}
+{% load static %}
+<h2>Your Prediction History</h2>
+<table>
+    <tr><th>Car Model</th><th>Predicted Price</th><th>Date</th></tr>
+    {% for item in history %}
+    <tr>
+        <td>{{ item.car_model }}</td>
+        <td>{{ item.predicted_price }}</td>
+        <td>{{ item.timestamp }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No predictions yet.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}
