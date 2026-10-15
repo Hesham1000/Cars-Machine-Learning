@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from .models import Register, PredictionHistory
 import pickle
 
@@ -73,6 +74,7 @@ def login_view(request):
     return render(request, 'login.html')
 
 
+@csrf_exempt
 def predict_api(request):
     if request.method != 'POST':
         return JsonResponse({'error': 'Method not allowed'}, status=405)
