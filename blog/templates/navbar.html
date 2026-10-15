@@ -20,6 +20,9 @@
                 <li><a href="">home</a></li>
                 <li><a href="">about</a></li>
                 <li><a href="">login</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'history' %}">history</a></li>
+                {% endif %}
                 <li><a href="">cars</a></li>
                 <li><a href="">contact</a></li>
             </ul>

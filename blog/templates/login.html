@@ -1,0 +1,26 @@
+{% extends 'navbar.html' %} {% block 'nav' %}
+{% load static %}
+<div class="form" style="max-width: 400px; margin: 80px auto; padding: 20px;">
+  <h1>Login</h1>
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %};">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <form method="POST" action="{% url 'login' %}">
+    {% csrf_token %}
+    <div style="margin-bottom: 10px;">
+      <label>Username</label><br>
+      <input type="text" name="username" required>
+    </div>
+    <div style="margin-bottom: 10px;">
+      <label>Password</label><br>
+      <input type="password" name="password" required>
+    </div>
+    <button type="submit">Login</button>
+  </form>
+  <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+</div>
+{% endblock %}
