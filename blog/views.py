@@ -7,8 +7,10 @@ import numpy as np
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout, User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib import messages
 
 from .models import Register, CarPrediction
@@ -74,6 +76,12 @@ def register_view(request):
             return redirect('login')
     return render(request, 'register.html')
 
+def logout_view(request):
+    logout(request)
+    messages.success(request, 'Logged out successfully')
+    return redirect('login')
+
+@csrf_exempt
 @require_POST
 @login_required
 def predict_price(request):
