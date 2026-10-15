@@ -2,6 +2,11 @@
 {% load static %}
 <div class="form" style="max-width: 400px; margin: 80px auto; padding: 20px;">
   <h1>Register</h1>
+  {% if error %}
+  <div class="error-message" style="color: red; background: #fee; padding: 10px; border: 1px solid red; margin-bottom: 15px; border-radius: 4px;">
+    {{ error }}
+  </div>
+  {% endif %}
   {% if messages %}
     <ul class="messages">
       {% for message in messages %}

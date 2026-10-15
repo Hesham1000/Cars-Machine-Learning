@@ -70,7 +70,7 @@
         <div class="img"><img src="{% static 'photos/pexels-yurii-hlei-1545743.jpg' %}" alt="" /></div>
         <div class="input">
           <h1 class="h1">features</h1>
-          <form id="f" action="#e" method="POST">
+          <form id="predictionForm" action="/api/predict/" method="POST">
             {% csrf_token %}
             <div class="labels">
               <label for="">year</label>
@@ -87,9 +87,8 @@
               <input type="number" name="es" step="any" required />
             </div>
             <input class="sub" type="submit" name="ff" />
-            {% if result %}
-            <h1 class="price"><span>price =</span> {{result}}<span>$</span></h1>
-            {% endif %}
+            <div id="predictionResult" class="price" style="display:none;"></div>
+            <div id="predictionError" style="color:red; display:none;"></div>
           </form>
         </div>
       </div>
@@ -185,6 +184,78 @@
       src="https://kit.fontawesome.com/c2e094ea21.js"
       crossorigin="anonymous"
     ></script>
+    <script>
+      (function () {
+        var form = document.getElementById('predictionForm');
+        if (!form) return;
+
+        var resultDiv = document.getElementById('predictionResult');
+        var errorDiv = document.getElementById('predictionError');
+
+        function showResult(value) {
+          if (resultDiv) {
+            resultDiv.innerText = value;
+            resultDiv.style.display = '';
+          }
+          if (errorDiv) {
+            errorDiv.style.display = 'none';
+          }
+        }
+
+        function showError(message) {
+          if (errorDiv) {
+            errorDiv.innerText = message;
+            errorDiv.style.display = '';
+          }
+          if (resultDiv) {
+            resultDiv.style.display = 'none';
+          }
+        }
+
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var data = Object.fromEntries(new FormData(this));
+          try {
+            fetch('/api/predict/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+              },
+              body: JSON.stringify(data)
+            })
+              .then(function (response) {
+                if (response.ok) {
+                  return response.json().then(function (data) {
+                    var price =
+                      data.predicted_price !== undefined
+                        ? data.predicted_price
+                        : data.price !== undefined
+                        ? data.price
+                        : data.result;
+                    showResult(price);
+                  });
+                } else {
+                  return response.json().then(function (errData) {
+                    var message =
+                      errData && errData.error
+                        ? errData.error
+                        : 'Prediction failed. Please try again.';
+                    showError(message);
+                  }).catch(function () {
+                    showError('Prediction failed. Please try again.');
+                  });
+                }
+              })
+              .catch(function () {
+                showError('Prediction failed. Please try again.');
+              });
+          } catch (err) {
+            showError('Prediction failed. Please try again.');
+          }
+        });
+      })();
+    </script>
     <script src="{% static 'home.js' %}"></script>
     {% endblock %}
   </body>
