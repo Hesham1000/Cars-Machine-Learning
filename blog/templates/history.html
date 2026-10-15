@@ -1,0 +1,28 @@
+{% extends 'navbar.html' %}
+{% block content %}
+<div class="container">
+    <h2>Your Prediction History</h2>
+    {% if predictions %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Car Model</th>
+                    <th>Predicted Price</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pred in predictions %}
+                <tr>
+                    <td>{{ pred.car_model }}</td>
+                    <td>${{ pred.predicted_price }}</td>
+                    <td>{{ pred.created_at|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No predictions yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
