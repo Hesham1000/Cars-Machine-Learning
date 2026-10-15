@@ -102,3 +102,12 @@ def predict_api(request):
     return JsonResponse({'predicted_price': predicted_price})
 
 
+def history_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    predictions = PredictionHistory.objects.filter(user=request.user).order_by('-created_at')
+
+    return render(request, 'history.html', {'predictions': predictions})
+
+

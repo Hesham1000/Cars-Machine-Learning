@@ -1,0 +1,68 @@
+{% extends 'navbar.html' %}
+{% load static %}
+{% block 'nav' %}
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'home.css' %}" type="text/css" />
+    <style>
+      .history-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+      }
+      .history-container h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .history-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .history-table th,
+      .history-table td {
+        border: 1px solid #ccc;
+        padding: 12px;
+        text-align: left;
+      }
+      .history-table th {
+        background-color: #f2f2f2;
+      }
+      .empty-message {
+        text-align: center;
+        margin-top: 20px;
+      }
+    </style>
+    <title>My Prediction History</title>
+  </head>
+  <body>
+    <section class="history-container">
+      <h1>My Prediction History</h1>
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>Car Model</th>
+            <th>Predicted Price</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for prediction in predictions %}
+            <tr>
+              <td>{{ prediction.car_model }}</td>
+              <td>{{ prediction.predicted_price }}</td>
+              <td>{{ prediction.created_at|date:'Y-m-d H:i' }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="3" class="empty-message">You have no predictions yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </body>
+</html>
+{% endblock %}
